@@ -1,0 +1,25 @@
+
+:root{
+  --bacground-color:#141d26;
+  --text-color:#E2E2d2;
+  --primary-color:#6D3C52;
+
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: 500;
+  font-size: 20px;
+  font-family: "Playfair Display", serif;
+  color: var(--text-color);
+  text-decoration: none;
+  list-style-type: none;
+}
+#root{
+  background-color: var(--bacground-color); 
+  min-height: 100vh;
+  
+}
+
+

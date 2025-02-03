@@ -1,0 +1,17 @@
+.header{
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    
+}
+.block__menu{
+    display: flex;
+    justify-content: space-around;
+    align-items: center; 
+
+}
+.menu__list{
+    display: flex;
+    gap: 24px;
+   
+}
