@@ -1,10 +1,13 @@
 import React from 'react';
 import Header from '../components/header/Header'
+import MainElements from '../components/Main/MainElements';
 
-function Home(props) {
+function Home() {
     return (
         <>
          <Header/>   
+         <MainElements/>
+
         </>
     );
 }
