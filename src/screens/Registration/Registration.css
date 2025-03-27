@@ -55,8 +55,3 @@
   button:hover {
     background-color: #d1d1d1; /* Слегка светлее для эффекта наведения */
   }
-.login-container{
-  max-width: 500px;
-  width: 50vh;
-  height: 50;
-}
