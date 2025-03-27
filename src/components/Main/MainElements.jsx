@@ -1,6 +1,7 @@
 import React from 'react'
 import './MainElements.css'
 import CitySelector from './CitySelector/CitySelector'
+import ListOfCars from './ListOfCars/ListOfCars'
 
 
 export default function MainElements() {
@@ -11,6 +12,7 @@ export default function MainElements() {
                 Легкий доступ к автомобилям в твоем городе. Просто забронируй и поехали!
             </p>
             <CitySelector/>
+            <ListOfCars/>
         </div>
        
         
