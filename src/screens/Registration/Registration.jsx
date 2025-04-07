@@ -11,8 +11,7 @@ const Registration = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isRegistered, setIsRegistered] = useState(false); // Состояние для отслеживания регистрации
-  // Инициализируем navigate
+  const [isRegistered, setIsRegistered] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,11 +42,11 @@ const Registration = () => {
   };
 
   return (
-    <div className="registration-container">
+    <>
       {isRegistered ? (
-        <LoginForm /> // Показываем форму авторизации после успешной регистрации
+        <LoginForm /> 
       ) : (
-        <>
+        <div className="registration-container">
           <h2>Регистрация</h2>
           {message && <p>{message}</p>}
           <form onSubmit={handleSubmit}>
@@ -81,18 +80,21 @@ const Registration = () => {
                 required
               />
             </div>
-            <button type="submit">Зарегистрироваться</button>
-            <button 
-              style={{ marginTop: '5px' }} 
+            <div className='button-registr'>
+              <button type="submit">Зарегистрироваться</button>
+              <button
+              className='button-enter' 
               type="button" // Изменяем тип на "button", чтобы предотвратить отправку формы
               onClick={handleLoginRedirect} // Обработчик клика для перенаправления на форму входа
-            >
-              Войти
-            </button>
+              >
+              Уже есть аккаунт?
+              </button>
+            </div>
+            
           </form>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

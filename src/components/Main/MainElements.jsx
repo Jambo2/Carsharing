@@ -8,7 +8,9 @@ export default function MainElements() {
   return (
     <div className='block_main'>
         <div className='element_main'>
-            <p>
+            <p style={{
+              fontSize: "50px"
+            }}>
                 Легкий доступ к автомобилям в твоем городе. Просто забронируй и поехали!
             </p>
             <CitySelector/>

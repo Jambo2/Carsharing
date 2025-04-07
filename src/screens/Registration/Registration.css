@@ -16,7 +16,6 @@
     max-width: 400px;
     margin: 100px auto;
     padding: 20px;
-    background-color: var(--background-color);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
@@ -52,6 +51,11 @@
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #d1d1d1; /* Слегка светлее для эффекта наведения */
+  .button-enter {
+    margin-top: 5px;
+    display: flex;
+    font-size: 15px;
+    text-decoration: underline;
+    background-color: transparent;
+    color: rgb(31, 55, 190);
   }
