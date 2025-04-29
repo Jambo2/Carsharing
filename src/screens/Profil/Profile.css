@@ -1,0 +1,39 @@
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-form input {
+    margin-bottom: 10px;
+    padding: 10px;
+
+    border-radius: 4px;
+  }
+  
+  .profile-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  
+  .profile-info p {
+    margin: 5px 0;
+  }
+  .profile-info{
+    margin-bottom: 15px;
+  }
+  
+  .message {
+    color: red; /* Цвет сообщения об ошибке */
+  }
+  

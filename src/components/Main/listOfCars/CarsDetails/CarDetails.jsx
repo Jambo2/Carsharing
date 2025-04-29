@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom'; 
-import './CarDetails.css';
+import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; 
+import './CarDetails.css'; 
 
 const CarDetails = () => {
-  const [car, setCar] = useState();
+  const [car, setCar] = useState(null);
   const [error, setError] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   
   const token = localStorage.getItem('token'); 
   const { id: carId } = useParams(); 
@@ -20,19 +24,54 @@ const CarDetails = () => {
           },
         });
 
-        setCar(response.data[`${carId - 1}`]); 
+        setCar(response.data[`${carId-9}`]); 
+        console.log(carId);
       } catch (err) {
         setError('Ошибка при загрузке деталей автомобиля');
-        console.log(err);
+        console.log(response.data[`${carId-9}`]);
       } 
     };
 
     fetchCarDetails();
   }, [carId, token]);
 
-  const handleRent = () => {
-    
-    alert(`Вы арендовали ${car.model} ${car.brand}`);
+  const handleRent = async () => {
+    if (!car.available) {
+      alert('Эта машина недоступна для аренды.');
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      alert('Пожалуйста, выберите обе даты.');
+      return;
+    }
+
+    // Проверка наличия контактных данных в localStorage
+    const storedContact = JSON.parse(localStorage.getItem("contact"));
+    if (!storedContact || !storedContact.firstName || !storedContact.lastName || !storedContact.email || !storedContact.phoneNumber) {
+      alert('Пожалуйста, заполните все контактные данные перед арендой.');
+      return;
+    }
+
+    const bookingData = {
+      userId: 1, // Замените на реальный ID пользователя
+      carId: car.id, 
+      startTime: startDate.toISOString(),
+      endTime: endDate.toISOString(),
+    };
+
+    try {
+      await axios.post('http://localhost:8082/api/booking/create', bookingData, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+      alert(`Вы арендовали ${car.model} ${car.brand} с ${startDate.toLocaleDateString()} по ${endDate.toLocaleDateString()}`);
+      navigate('/home');
+    } catch (err) {
+      alert('Ошибка при создании бронирования. Попробуйте еще раз.');
+      console.log(err);
+    }
   };
 
   const handleCancel = () => {
@@ -47,12 +86,20 @@ const CarDetails = () => {
       <h2>{car.model} {car.brand}</h2>
       <p>Цена: {car.pricePerHour} руб/час</p>
       <p>Статус: {car.available ? 'Доступно' : 'Недоступно'}</p>
-      
+
+      <div className="date-picker">
+        <label>Выберите дату начала:</label>
+        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+        
+        <label>Выберите дату окончания:</label>
+        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+      </div>
+
       <div className="buttons-rents">
         <button onClick={handleCancel}>
           Отмена
         </button>
-        <button onClick={handleRent} disabled={!car.available}>
+        <button onClick={handleRent}>
           Арендовать
         </button>
       </div>

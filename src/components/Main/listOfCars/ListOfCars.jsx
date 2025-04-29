@@ -8,7 +8,7 @@ const ListOfCars = () => {
   const [error, setError] = useState(null);
   
   const token = localStorage.getItem('token'); 
-  const navigate = useNavigate(); // Получите объект history
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -30,7 +30,7 @@ const ListOfCars = () => {
   }, [token]);
 
   const handleCarClick = (carId) => {
-    navigate(`${carId}`); // Исправлено
+    navigate(`${carId}`); 
   };
 
   return (

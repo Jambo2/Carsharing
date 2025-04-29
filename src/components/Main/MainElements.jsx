@@ -1,7 +1,7 @@
 import React from 'react'
 import './MainElements.css'
 import CitySelector from './CitySelector/CitySelector'
-import ListOfCars from './ListOfCars/ListOfCars'
+import ListOfCars from './ListOfCars/ListOfCars.jsx'
 
 
 export default function MainElements() {

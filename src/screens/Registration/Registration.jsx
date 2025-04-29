@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import './Registration.css';
-import LoginForm from '../Login/LoginForm';
+import LoginForm from '../login/LoginForm';
 import axios from 'axios';
+
 
 
 
@@ -16,7 +17,6 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Проверка совпадения паролей
     if (password !== confirmPassword) {
       setMessage('Пароли не совпадают!');
       return;
@@ -31,7 +31,8 @@ const Registration = () => {
       localStorage.setItem('token', response.data.token); 
       
       setMessage(response.data.message || 'Регистрация завершена!');
-      setIsRegistered(true); // Устанавливаем состояние регистрации
+      setIsRegistered(true);
+      navigator('/contacts')
     } catch (error) {
       setMessage(error.response?.data?.message || 'Ошибка при регистрации');
     }
@@ -84,8 +85,8 @@ const Registration = () => {
               <button type="submit">Зарегистрироваться</button>
               <button
               className='button-enter' 
-              type="button" // Изменяем тип на "button", чтобы предотвратить отправку формы
-              onClick={handleLoginRedirect} // Обработчик клика для перенаправления на форму входа
+              type="button" 
+              onClick={handleLoginRedirect} 
               >
               Уже есть аккаунт?
               </button>

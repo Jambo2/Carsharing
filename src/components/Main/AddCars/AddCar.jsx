@@ -1,94 +1,128 @@
-// src/AddCar.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AddCar.css'; // Импортируем стили
 
-const AddCar = () => {
-  const [model, setModel] = useState('');
-  const [brand, setBrand] = useState('');
-  const [pricePerHour, setPricePerHour] = useState('');
-  const [available, setAvailable] = useState(true);
-  const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    const newCar = {
-      available,
-      brand,
-      model,
-      pricePerHour: parseFloat(pricePerHour),
+const ListOfCars = () => {
+  const [cars, setCars] = useState([]); 
+  const [error, setError] = useState(null);
+  const [newCar, setNewCar] = useState({ brand: '', model: '', pricePerHour: '', available: true });
+  
+  const token = localStorage.getItem('token'); 
+
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      if (!token) {
+        setError('Необходима авторизация');
+        return;
+      }
+      
+      try {
+        const response = await axios.get('http://localhost:8082/api/cars/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setCars(response.data); 
+
+      } catch (err) {
+        setError('Ошибка при загрузке автомобилей');
+        console.error(err);
+      } 
     };
 
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('Необходима авторизация');
-      return;
-    }
+    fetchCars();
+  }, [token]);
 
+
+
+  const handleDeleteCar = async (carId) => {
+    if (window.confirm('Вы уверены, что хотите удалить этот автомобиль?')) {
+      try {
+        await axios.delete(`http://localhost:8082/api/cars/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCars(cars.filter(car => car.id !== carId));
+      } catch (err) {
+        setError('Ошибка при удалении автомобиля');
+        console.error(err);
+      }
+    }
+  };
+
+  const handleAddCar = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8082/api/cars/add', newCar, {
         headers: {
-          Authorization: `Bearer ${token}`, // Здесь используются обратные кавычки
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      setModel('');
-      setBrand('');
-      setPricePerHour('');
-      setAvailable(true);
-      setMessage('Автомобиль успешно добавлен!');
-
-    } catch (error) {
-      console.error('Ошибка при добавлении автомобиля:', error); // Логирование ошибки
-      setMessage('Ошибка при добавлении автомобиля: ' + (error.response?.data?.message || 'Неизвестная ошибка'));
+      setCars([...cars, response.data]);
+      setNewCar({ brand: '', model: '', pricePerHour: '', available: true }); // Сброс формы
+    } catch (err) {
+      setError('Ошибка при добавлении автомобиля');
+      console.error(err);
     }
   };
 
   return (
-    <div className="add-car-container">
-      <h2>Добавить автомобиль</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Модель:</label>
-          <input
-            type="text"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            required
+    <div className="car-list">
+      <h2>Список автомобилей</h2>
+      {error && <p className="error-message">{error}</p>}
+      
+      <form onSubmit={handleAddCar} className="add-car-form">
+        <input 
+          type="text" 
+          placeholder="Марка" 
+          value={newCar.brand} 
+          onChange={(e) => setNewCar({ ...newCar, brand: e.target.value })} 
+          required 
+        />
+        <input 
+          type="text" 
+          placeholder="Модель" 
+          value={newCar.model} 
+          onChange={(e) => setNewCar({ ...newCar, model: e.target.value })} 
+          required 
+        />
+        <input 
+          type="number" 
+          placeholder="Цена за час" 
+          value={newCar.pricePerHour} 
+          onChange={(e) => setNewCar({ ...newCar, pricePerHour: e.target.value })} 
+          required 
+        />
+        <label>
+          Доступно:
+          <input 
+            type="checkbox" 
+            checked={newCar.available} 
+            onChange={(e) => setNewCar({ ...newCar, available: e.target.checked })} 
           />
-        </div>
-        <div>
-          <label>Брэнд:</label>
-          <input
-            type="text"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Цена за час:</label>
-          <input
-            type="number"
-            value={pricePerHour}
-            onChange={(e) => setPricePerHour(e.target.value)}
-            required
-          />
-        </div>
-        <div className='check_box'>
-          <label>Доступен:</label>
-          <input
-            type="checkbox"
-            checked={available}
-            onChange={(e) => setAvailable(e.target.checked)}
-          />
-        </div>
-        <button type="submit">Добавить</button>
+        </label>
+        <button type="submit">Добавить автомобиль</button>
       </form>
-      {message && <p>{message}</p>}
+
+      {cars.length > 0 ? (
+        <div className="car-cards">
+          {cars.map((car) => (
+            <div className="car-card" key={car.id} onClick={() => handleCarClick(car.id)}>
+              <h3>{car.brand} {car.model}</h3>
+              <p>Цена: {car.pricePerHour} руб/час</p>
+              <p>Статус: {car.available ? 'Доступно' : 'Недоступно'}</p>
+              <button onClick={() => handleDeleteCar(car.id)}>Удалить</button>
+            </div>          ))}
+        </div>
+      ) : (
+        <p>Нет доступных автомобилей.</p>
+      )}
     </div>
   );
 };
 
-export default AddCar;
+export default ListOfCars;

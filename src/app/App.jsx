@@ -4,20 +4,25 @@ import Registration from "../screens/Registration/Registration";
 import AddCar from "../components/Main/AddCars/AddCar";
 import Header from "../components/header/Header";
 import CarDetails from "../components/Main/listOfCars/CarsDetails/CarDetails";
+import Profile from "../screens/Profil/Profile";
+import Contacts from "../screens/contacts/Contacts";
 
 export default function App() {
   const location = useLocation();
-  const showHeader = location.pathname !== "/registration" && location.pathname !== "/"; // Указываем пути, на которых Header не будет отображаться
+  const showHeader = location.pathname !== "/registration" && location.pathname !== "/";
 
   return (
     <>
       {showHeader && <Header />}
       <Routes>
         <Route path="/home" element={<Home />} />
+        <Route path="/carsharing" element={<Home />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/" element={<Registration />} />
-        <Route path="/carsharing" element={<AddCar />} />
+        <Route path="/addCar" element={<AddCar />} />
         <Route path="home/:id" element={<CarDetails />} /> 
+        <Route path="/profile" element={<Profile />} /> 
+        <Route path="/contacts" element={<Contacts />} />
       </Routes>
     </>
   );
