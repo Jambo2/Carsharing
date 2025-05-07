@@ -5,7 +5,7 @@ import AddCar from "../components/Main/AddCars/AddCar";
 import Header from "../components/header/Header";
 import CarDetails from "../components/Main/listOfCars/CarsDetails/CarDetails";
 import Profile from "../screens/Profil/Profile";
-import Contacts from "../screens/contacts/Contacts";
+
 
 export default function App() {
   const location = useLocation();
@@ -22,7 +22,6 @@ export default function App() {
         <Route path="/addCar" element={<AddCar />} />
         <Route path="home/:id" element={<CarDetails />} /> 
         <Route path="/profile" element={<Profile />} /> 
-        <Route path="/contacts" element={<Contacts />} />
       </Routes>
     </>
   );

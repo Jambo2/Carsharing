@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './AddCar.css'; // Подключаем CSS файл
 
-
-
-const ListOfCars = () => {
+const AddCar = () => {
   const [cars, setCars] = useState([]); 
   const [error, setError] = useState(null);
   const [newCar, setNewCar] = useState({ brand: '', model: '', pricePerHour: '', available: true });
   
   const token = localStorage.getItem('token'); 
-
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -36,12 +34,10 @@ const ListOfCars = () => {
     fetchCars();
   }, [token]);
 
-
-
   const handleDeleteCar = async (carId) => {
     if (window.confirm('Вы уверены, что хотите удалить этот автомобиль?')) {
       try {
-        await axios.delete(`http://localhost:8082/api/cars/all`, {
+        await axios.delete(`http://localhost:8082/api/cars/all/${carId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -97,7 +93,8 @@ const ListOfCars = () => {
           onChange={(e) => setNewCar({ ...newCar, pricePerHour: e.target.value })} 
           required 
         />
-        <label>
+        <label style={{display:'flex',
+        }}>
           Доступно:
           <input 
             type="checkbox" 
@@ -111,12 +108,13 @@ const ListOfCars = () => {
       {cars.length > 0 ? (
         <div className="car-cards">
           {cars.map((car) => (
-            <div className="car-card" key={car.id} onClick={() => handleCarClick(car.id)}>
+            <div className="car-card" key={car.id}>
               <h3>{car.brand} {car.model}</h3>
               <p>Цена: {car.pricePerHour} руб/час</p>
               <p>Статус: {car.available ? 'Доступно' : 'Недоступно'}</p>
               <button onClick={() => handleDeleteCar(car.id)}>Удалить</button>
-            </div>          ))}
+            </div>          
+          ))}
         </div>
       ) : (
         <p>Нет доступных автомобилей.</p>
@@ -125,4 +123,4 @@ const ListOfCars = () => {
   );
 };
 
-export default ListOfCars;
+export default AddCar;

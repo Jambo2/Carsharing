@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; 
 import './CarDetails.css'; 
 
-const CarDetails = () => {
+const CarDetails = ({ deductRentCost }) => { // Получаем функцию через props
   const [car, setCar] = useState(null);
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -24,11 +24,9 @@ const CarDetails = () => {
           },
         });
 
-        setCar(response.data[`${carId-9}`]); 
-        console.log(carId);
+        setCar(response.data[carId - 9]); 
       } catch (err) {
         setError('Ошибка при загрузке деталей автомобиля');
-        console.log(response.data[`${carId-9}`]);
       } 
     };
 
@@ -46,15 +44,18 @@ const CarDetails = () => {
       return;
     }
 
-    // Проверка наличия контактных данных в localStorage
     const storedContact = JSON.parse(localStorage.getItem("contact"));
     if (!storedContact || !storedContact.firstName || !storedContact.lastName || !storedContact.email || !storedContact.phoneNumber) {
       alert('Пожалуйста, заполните все контактные данные перед арендой.');
       return;
     }
 
+    
+    const hours = Math.ceil((endDate - startDate) / (1000 * 60 * 60)); // Разница в часах
+    const totalCost = hours * car.pricePerHour;
+
     const bookingData = {
-      userId: 1, // Замените на реальный ID пользователя
+      userId: 1, 
       carId: car.id, 
       startTime: startDate.toISOString(),
       endTime: endDate.toISOString(),
@@ -66,7 +67,11 @@ const CarDetails = () => {
           Authorization: `Bearer ${token}`, 
         },
       });
-      alert(`Вы арендовали ${car.model} ${car.brand} с ${startDate.toLocaleDateString()} по ${endDate.toLocaleDateString()}`);
+      
+      
+      deductRentCost(totalCost); 
+
+      alert(`Вы арендовали ${car.model} ${car.brand} с ${startDate.toLocaleDateString()} по ${endDate.toLocaleDateString()} за ${totalCost}`);
       navigate('/home');
     } catch (err) {
       alert('Ошибка при создании бронирования. Попробуйте еще раз.');
@@ -98,7 +103,7 @@ const CarDetails = () => {
       <div className="buttons-rents">
         <button onClick={handleCancel}>
           Отмена
-        </button>
+        </button>        
         <button onClick={handleRent}>
           Арендовать
         </button>

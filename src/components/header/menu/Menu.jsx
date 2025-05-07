@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import 'boxicons';
 import { Link, useNavigate } from 'react-router-dom';
+import CarDetails from '../../Main/listOfCars/CarsDetails/CarDetails';
 
 export default function Menu() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate(); // Хук для навигации
+  const [balance, setBalance] = useState(1000000); // Начальная сумма
+  const navigate = useNavigate(); 
 
-  // Функция для проверки аутентификации
   const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(token !== null);
   };
 
-  // Функция для входа (сохранение токена)
   const login = (token) => {
     localStorage.setItem('token', token);
-    checkAuthStatus(); // Обновляем статус аутентификации
+    checkAuthStatus(); 
   };
 
-  // Функция для выхода (удаление токена)
   const logout = () => {
     localStorage.removeItem('token');
-    checkAuthStatus(); // Обновляем статус аутентификации
+    checkAuthStatus(); 
+    navigate('/home');
   };
 
-  // Проверяем статус аутентификации при монтировании компонента
+  const deductRentCost = (amount) => {
+    setBalance((prevBalance) => prevBalance - amount);
+  };
+
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  // Перенаправляем на страницу регистрации, если не аутентифицирован
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/home'); 
@@ -47,8 +49,8 @@ export default function Menu() {
         <ul className='menu__list'>
           <li><Link to="home">Каршеринг</Link></li>
           <li><Link to="addCar">Админка</Link></li>
-          <li><Link href="">Подписка</Link></li>
-          <li><Link href="">Для бизнеса</Link></li>
+          <li><Link to="">Подписка</Link></li>
+          <li><Link to="">Для бизнеса</Link></li>
           
           {isAuthenticated ? (
             <>
@@ -60,6 +62,12 @@ export default function Menu() {
           )}
         </ul>
       </nav>
+      <div className="balance">
+        <h3>Текущий баланс: {balance} руб.</h3>
+      </div>
+
+   
+      
     </div>
   );
 }

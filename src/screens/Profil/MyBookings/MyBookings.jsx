@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import './MyBookings.css'; 
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -16,13 +17,13 @@ export default function MyBookings() {
             Authorization: `Bearer ${token}` 
           }
         });
-        
-        setBookings(response.data); 
+
+        setBookings(response.data);
       } catch (error) {
         console.error(error);
         setError(error.response ? error.response.data : "Ошибка при получении бронирований"); // Обработка ошибок
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -30,27 +31,29 @@ export default function MyBookings() {
   }, []);
 
   if (loading) {
-    return <div>Загрузка...</div>; 
+    return <div className="loading">Загрузка...</div>;
   }
 
   if (error) {
-    return <div>Ошибка: {error}</div>;
+    return <div className="error">Ошибка: {error}</div>;
   }
 
   return (
-    <div>
+    <div className="bookings-container">
       <h2>Мои бронирования</h2>
-      <ul>
+      <ul className="bookings-list">
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <li key={booking.id}>
-              Машина: {booking.car?.model || "неизвестно"}, <br />
-              С {booking.startTime} по {booking.endTime}, <br />
-              Сумма: {booking.totalPrice}
+            <li key={booking.id} className="booking-item">
+              <div className="booking-details">
+                <strong>Машина:</strong> {booking.car?.model || "неизвестно"}<br />
+                <strong>Период:</strong> {booking.startTime} по {booking.endTime}<br />
+                <strong>Сумма:</strong> {booking.totalPrice} руб.
+              </div>
             </li>
           ))
         ) : (
-          <li>Нет доступных бронирований.</li> 
+          <li className="no-bookings">Нет доступных бронирований.</li>
         )}
       </ul>
     </div>
