@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; 
 import './CarDetails.css'; 
 
-const CarDetails = ({ deductRentCost }) => { // Получаем функцию через props
+
+const CarDetails = () => { 
   const [car, setCar] = useState(null);
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -25,7 +26,7 @@ const CarDetails = ({ deductRentCost }) => { // Получаем функцию 
         });
 
         setCar(response.data[carId - 9]); 
-      } catch (err) {
+      } catch (error) {
         setError('Ошибка при загрузке деталей автомобиля');
       } 
     };
@@ -68,8 +69,8 @@ const CarDetails = ({ deductRentCost }) => { // Получаем функцию 
         },
       });
       
-      
-      deductRentCost(totalCost); 
+      deductRentCost(totalCost);
+    
 
       alert(`Вы арендовали ${car.model} ${car.brand} с ${startDate.toLocaleDateString()} по ${endDate.toLocaleDateString()} за ${totalCost}`);
       navigate('/home');

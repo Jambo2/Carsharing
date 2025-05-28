@@ -49,8 +49,8 @@ export default function Menu() {
         <ul className='menu__list'>
           <li><Link to="home">Каршеринг</Link></li>
           <li><Link to="addCar">Админка</Link></li>
-          <li><Link to="">Подписка</Link></li>
-          <li><Link to="">Для бизнеса</Link></li>
+          <li><Link to="#">Подписка</Link></li>
+          <li><Link to="#">Для бизнеса</Link></li>
           
           {isAuthenticated ? (
             <>

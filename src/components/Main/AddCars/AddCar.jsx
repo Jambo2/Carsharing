@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AddCar.css'; // Подключаем CSS файл
+import './AddCar.css'; 
 
 const AddCar = () => {
   const [cars, setCars] = useState([]); 
